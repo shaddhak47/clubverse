@@ -1,7 +1,8 @@
+// server.js
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import morgan from "morgan";               // ⭐ Request logger
+import morgan from "morgan";                 // API request logger
 import db from "./config/db.js";
 
 // ROUTES
@@ -19,10 +20,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan("dev"));                   // ⭐ Logs each API request
+app.use(morgan("dev"));                      // Logs each API request
 
 // ---------------------------------------------------------
-// TEST DATABASE CONNECTION (startup check)
+// TEST DATABASE CONNECTION ON STARTUP
 // ---------------------------------------------------------
 (async () => {
   try {
@@ -38,25 +39,26 @@ app.use(morgan("dev"));                   // ⭐ Logs each API request
 // ROUTES
 // ---------------------------------------------------------
 
-// HOD module
+// HOD module (x-user-id required inside route files)
 app.use("/api/hod", hodRoutes);
 
-// SUPERADMIN module
+// SUPERADMIN module (x-user-id required)
 app.use("/api/admin", adminRoutes);
 
 // ---------------------------------------------------------
-// DEFAULT ROOT ROUTE
+// ROOT CHECK ROUTE
 // ---------------------------------------------------------
 app.get("/", (req, res) => {
   res.send("Campus Activity Backend Running 🚀");
 });
 
 // ---------------------------------------------------------
-// NOT FOUND HANDLER
+// 404 HANDLER
 // ---------------------------------------------------------
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).json({
-    error: "Route Not Found",
+    status: "error",
+    message: "Route Not Found",
     path: req.originalUrl,
   });
 });
