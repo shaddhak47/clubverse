@@ -1,0 +1,11 @@
+# Dependencies
+node_modules
+
+# Secret Environment Variables
+.env
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
