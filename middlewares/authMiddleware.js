@@ -1,6 +1,5 @@
 // middlewares/authMiddleware.js
 import db from "../config/db.js";
-
 /**
  * --------------------------------------------------------
  * readTestUser: REQUIRED (NO LOGIN, NO PASSWORD, NO JWT)

@@ -1,7 +1,6 @@
 // controllers/hodController.js
 import xlsx from "xlsx";
 import db from "../config/db.js";
-
 /* ======================================================
    ✅ 1. Upload Excel (Students + Proctors)
 ====================================================== */
