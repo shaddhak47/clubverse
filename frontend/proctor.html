@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Proctor Dashboard - Clubverse</title>
+    <style> body{font-family:Arial; padding:16px} .box{border:1px solid #ddd;padding:12px;border-radius:6px;margin-bottom:12px} </style>
+  </head>
+  <body>
+    <h1>Proctor Dashboard</h1>
+    <div class="box">
+      <label>Proctor User ID: <input id="proctorId" value="9" style="width:120px"/></label>
+      <label>Semester: <input id="semester" value="5" style="width:80px"/></label>
+      <button id="btnFetchProctees">Get Proctees</button>
+    </div>
+
+    <div class="box">
+      <h3>Events (overview)</h3>
+      <label>Category: <input id="eventsCategory" placeholder="technical"/></label>
+      <label>Dept ID: <input id="eventsDept" style="width:80px"/></label>
+      <label>Semester: <input id="eventsSemester" style="width:80px"/></label>
+      <button id="btnFetchEvents">Get Events</button>
+    </div>
+
+    <div class="box">
+      <h3>Award Points</h3>
+      <label>Student User ID: <input id="awardUserId" style="width:120px"/></label>
+      <label>Event ID: <input id="awardEventId" style="width:80px"/></label>
+      <label>Points: <input id="awardPoints" style="width:80px" value="5"/></label>
+      <label>Category: <input id="awardCategory" style="width:160px" value="Technical Workshop"/></label>
+      <button id="btnAwardPoints">Award Points</button>
+    </div>
+
+    <div class="box">
+      <h3>Verify Uploaded Proof</h3>
+      <label>Registration ID: <input id="verifyRegistrationId" style="width:120px"/></label>
+      <label>Verifier (your proctor id): <input id="verifyBy" style="width:80px"/></label>
+      <select id="verifyStatus"><option value="approved">approved</option><option value="rejected">rejected</option></select>
+      <button id="btnVerifyDoc">Verify Document</button>
+    </div>
+
+    <div class="box">
+      <h3>Categories</h3>
+      <label>Category name: <input id="newCategoryName"/></label>
+      <label>Max points: <input id="newCategoryPoints" style="width:80px" value="10"/></label>
+      <button id="btnAddCategory">Add Category</button>
+      <button id="btnGetCategories">Get Categories (approved)</button>
+    </div>
+
+    <div class="box">
+      <pre id="result" style="height:300px;overflow:auto;background:#f9f9f9;padding:12px"></pre>
+    </div>
+
+    <script src="./proctor.js"></script>
+  </body>
+</html>
