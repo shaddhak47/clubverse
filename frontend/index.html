@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Clubverse Demo</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Clubverse — Demo</h1>
+
+    <div class="box">
+      <h3>Firebase Config (project)</h3>
+      <p>Using your existing Firebase project. Edit `app.js` to change config if needed.</p>
+    </div>
+
+    <div class="box">
+      <h3>Sign up / Sign in</h3>
+      <form id="authForm" onsubmit="return false">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="password" />
+        <div style="margin-top:8px">
+          <button id="btnSignup" type="button">Sign up</button>
+          <button id="btnLogin" type="button">Sign in</button>
+          <button id="btnSignOut" type="button">Sign out</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="box">
+      <h3>ID Token</h3>
+      <div>
+        <button id="btnShowIdToken">Get ID Token</button>
+      </div>
+      <pre id="idToken">(empty)</pre>
+    </div>
+
+    <div class="box">
+      <h3>Backend Calls</h3>
+      <div style="margin-bottom:8px">
+        <button id="btnVerify">Call /api/auth/firebase/verify</button>
+        <button id="btnVerifyDebug">Call /api/auth/firebase/verify-debug</button>
+        <button id="btnProfile">Call /api/student/profile</button>
+      </div>
+      <pre id="backendResp">(no response yet)</pre>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

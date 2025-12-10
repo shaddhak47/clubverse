@@ -1,28 +1,28 @@
 import express from "express";
 
-// This is a route factory that takes the instantiated controller
-const proctorRoutes = (controller) => {
+// Route factory for FacultyController
+const facultyRoutes = (controller) => {
     const router = express.Router();
 
-    // 1. Get Proctee List
-    router.get("/:id/students", controller.getProcteeList.bind(controller));
+    // Create an event
+    router.post("/events", controller.createEvent.bind(controller));
 
-    // 2. Award Points
-    router.post("/activity_points/award", controller.awardPoints.bind(controller));
+    // Assign role for an event (volunteers, organizers)
+    router.post("/events/:id/assign-role", controller.assignRole.bind(controller));
 
-    // 3. Verify Uploaded Proof (using registration_id in URL, doc_id in body)
-    router.post("/registrations/:id/verify-doc", controller.verifyDocument.bind(controller));
+    // Get participants and assigned roles for an event
+    router.get("/events/:id/participants", controller.getParticipants.bind(controller));
 
-    // 4. Get All Events (for Proctor Overview)
-    router.get("/:id/events", controller.getEvents.bind(controller));
+    // Generate QR for attendance
+    router.post("/events/:id/generate-qr", controller.generateQR.bind(controller));
 
-    // 5. Add New Category
-    router.post("/categories", controller.addCategory.bind(controller));
+    // Get all events (with optional filters)
+    router.get("/events", controller.getAllEvents.bind(controller));
 
-    // 6. Get Existing Categories
-    router.get("/categories", controller.getCategories.bind(controller));
+    // Get events created by a faculty member
+    router.get("/:id/events", controller.getCreatedEvents.bind(controller));
 
     return router;
 };
 
-export default proctorRoutes;
+export default facultyRoutes;

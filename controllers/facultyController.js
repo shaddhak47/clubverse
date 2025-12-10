@@ -18,8 +18,17 @@ export default class FacultyController extends BaseController {
                 is_external, payment, created_by, dept_id,
             } = req.body;
 
-            const payment_amount = payment.amount;
-            const payment_options = payment.options;
+            const payment_amount = payment?.amount || 0;
+            // Handle payment_options: convert to array if string, or use empty array
+            let payment_options = payment?.options || [];
+            if (typeof payment_options === 'string') {
+                // Split by comma and trim, filter out empty strings
+                payment_options = payment_options.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            }
+            // If still empty array, set to null for DB (or use empty array literal if column allows)
+            if (payment_options.length === 0) {
+                payment_options = null; // or use [] if your DB column allows empty arrays
+            }
 
             const event = await this.db.one(
                 `INSERT INTO events
@@ -124,7 +133,8 @@ export default class FacultyController extends BaseController {
                 [event_id, token, expires_at, issued_by_user_id]
             );
 
-            return this.success(res, { token, event_id, expires_at }, "QR generated successfully");
+            // Return a numeric HTTP status code (200) and include a message in the payload
+            return this.success(res, { token, event_id, expires_at, message: 'QR generated successfully' }, 200);
         } catch (err) {
             return this.error(res, err.message);
         }

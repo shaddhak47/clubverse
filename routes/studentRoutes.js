@@ -10,8 +10,15 @@ import {
   getActivity,
   pointsSummary,
   listEvents,
+  getEventDetails,
   listNotifications,
-  markNotificationRead
+  markNotificationRead,
+  // registrations
+  registerForEvent,
+  unregisterFromEvent,
+  listRegistrations,
+  markAttendance
+  ,uploadProofForRegistration, getMyEvents, pointsSummaryForUser
 } from "../controllers/studentController.js";
 
 import { readTestUser } from "../middlewares/authMiddleware.js";
@@ -42,6 +49,23 @@ router.get("/points", pointsSummary);
 
 // EVENTS
 router.get("/events", listEvents);
+// Event details
+router.get("/events/:event_id", getEventDetails);
+
+// REGISTRATIONS
+router.post('/events/:event_id/register', registerForEvent);
+router.delete('/events/:event_id/register', unregisterFromEvent);
+router.get('/registrations', listRegistrations);
+router.post('/events/:event_id/attend', markAttendance);
+
+// Upload proof for a registration
+router.post('/registrations/:registration_id/upload-proof', uploadSingle('file'), uploadProofForRegistration);
+
+// My events (for a given user id or 'me')
+router.get('/users/:user_id/my-events', getMyEvents);
+
+// Points summary for a user
+router.get('/users/:user_id/points', pointsSummaryForUser);
 
 // NOTIFICATIONS
 router.get("/notifications", listNotifications);

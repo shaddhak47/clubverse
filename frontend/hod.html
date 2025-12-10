@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>HOD Dashboard - Clubverse</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>HOD Dashboard</h1>
+    <div class="box">
+      <p>HOD tools to review submissions, approve events/categories and manage department users.</p>
+
+      <div>
+        <label>Department ID: <input id="deptId" type="number" value="1" style="width:80px" /></label>
+        <label style="margin-left:12px">Semester: <input id="semester" type="number" value="5" style="width:60px" /></label>
+        <label style="margin-left:12px">HOD User ID (x-user-id): <input id="hodUserId" type="number" value="2" style="width:80px" /></label>
+      </div>
+
+      <hr />
+
+      <div>
+        <h3>Department Users</h3>
+        <input id="usersFile" type="file" accept=".xlsx,.xls" />
+        <button id="btnUploadUsers">Upload Excel (Students + Proctors)</button>
+        <button id="btnFetchUsers">Fetch Department Users</button>
+      </div>
+
+      <hr />
+
+      <div>
+        <h3>Verified Submissions</h3>
+        <button id="btnFetchVerified">Fetch Verified Submissions</button>
+      </div>
+
+      <hr />
+
+      <div>
+        <h3>Approval</h3>
+        <label>Type:
+          <select id="approvalType"><option value="event">event</option><option value="category">category</option></select>
+        </label>
+        <label style="margin-left:8px">ID: <input id="approvalId" type="number" style="width:90px" /></label>
+        <label style="margin-left:8px">Action:
+          <select id="approvalAction"><option value="approve">approve</option><option value="reject">reject</option></select>
+        </label>
+        <label style="margin-left:8px">Remarks: <input id="approvalRemarks" type="text" style="width:220px" /></label>
+        <div style="margin-top:8px">
+          <button id="btnApprove">Submit Approval</button>
+          <button id="btnApproveEvent">Approve Event (simple)</button>
+        </div>
+      </div>
+
+      <hr />
+
+      <div>
+        <h3>View Department Events</h3>
+        <label>Category: <input id="eventsCategory" type="text" style="width:160px" /></label>
+        <label style="margin-left:8px">Status: <input id="eventsStatus" type="text" style="width:120px" /></label>
+        <button id="btnViewEvents">View Events</button>
+      </div>
+
+    </div>
+
+    <div class="box">
+      <h3>Result</h3>
+      <pre id="result" style="white-space:pre-wrap;max-height:500px;overflow:auto"></pre>
+    </div>
+
+    <script>
+      // Ensure frontend calls the backend directly (avoid static-server handling API requests)
+      window.API_BASE = window.API_BASE || 'http://localhost:5000';
+    </script>
+    <script src="hod.js?v=2"></script>
+  </body>
+</html>

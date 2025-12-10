@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Admin Dashboard - Clubverse</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Admin Dashboard</h1>
+    <div class="box">
+      <h3>Upload HODs (Excel)</h3>
+      <p>Upload a spreadsheet (.xlsx) with columns: <strong>email</strong>, <strong>name</strong>, <strong>dept_code</strong> (optional).</p>
+      <input type="file" id="file" accept=".xlsx,.xls" />
+      <button id="btnUpload">Upload & Process</button>
+      <pre id="result">(no result)</pre>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

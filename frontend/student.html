@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Dashboard - Clubverse</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Student Dashboard</h1>
+    <div class="box">
+      <h3>Authentication</h3>
+      <p>Paste your Firebase ID token (for demo) or provide a dev user id (USN or numeric staff id).</p>
+      <input id="idToken" style="width:400px" placeholder="Paste Firebase ID token here" />
+      <div style="margin-top:6px">Dev header: <input id="devUserId" placeholder="x-user-id (e.g. 1BM20CS001 or 4)" style="width:220px" /></div>
+      <button id="btnProfile">Get Profile</button>
+      <pre id="out">(no output yet)</pre>
+    </div>
+
+    <div class="box">
+      <h3>Events</h3>
+      <label>Category: <input id="eventsCategory" /></label>
+      <label style="margin-left:8px">Page: <input id="eventsPage" value="1" style="width:60px" /></label>
+      <label style="margin-left:8px">Per page: <input id="eventsPer" value="10" style="width:60px" /></label>
+      <button id="btnListEvents">List Events</button>
+      <hr />
+      <label>Event ID: <input id="eventId" style="width:120px" /></label>
+      <button id="btnGetEvent">Get Event Details</button>
+      <button id="btnRegisterEvent">Register for Event</button>
+    </div>
+
+    <div class="box">
+      <h3>My Registrations / Upload Proof</h3>
+      <label>Semester (optional): <input id="myEventsSemester" style="width:80px" /></label>
+      <button id="btnMyEvents">View My Events</button>
+      <div style="margin-top:8px">
+        <label>Registration ID to upload proof: <input id="registrationId" style="width:120px" /></label>
+        <label style="margin-left:8px">Doc type: <input id="docType" style="width:160px" placeholder="e.g. certificate" /></label>
+        <input id="proofFile" type="file" />
+        <button id="btnUploadProof">Upload Proof</button>
+      </div>
+    </div>
+
+    <div class="box">
+      <h3>Points</h3>
+      <label>Semester: <input id="pointsSemester" style="width:80px" /></label>
+      <button id="btnPoints">View Points Summary</button>
+    </div>
+
+    <script src="student.js"></script>
+  </body>
+</html>

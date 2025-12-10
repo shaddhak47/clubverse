@@ -1,5 +1,8 @@
 import express from "express";
 import AdminController from "../controllers/adminController.js";
+import multer from 'multer';
+
+const upload = multer({ dest: 'uploads/admin' });
 
 const router = express.Router();
 
@@ -7,6 +10,7 @@ const router = express.Router();
 // USER CRUD ROUTES
 // ==============================
 router.post("/users", AdminController.createUser);
+router.post('/upload-hods', upload.single('file'), AdminController.uploadHods);
 router.get("/users", AdminController.listUsers);
 router.patch("/users/:id", AdminController.updateUser);
 router.delete("/users/:id", AdminController.deleteUser);

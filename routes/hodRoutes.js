@@ -48,6 +48,19 @@ router.get(
   HODController.getDepartmentUsers
 );
 
+// 2.1️⃣ Fetch Verified Submissions (by Proctor) for HOD review
+router.get(
+  "/:dept_id/documents/verified",
+  (req, res, next) => {
+    console.log(`📄 Fetching verified submissions for dept ${req.params.dept_id}`);
+    next();
+  },
+  HODController.getVerifiedSubmissions
+);
+
+// 2.2️⃣ HOD reviews a document (add remarks / approve/reject)
+router.post(`/:dept_id/documents/:doc_id/review`, HODController.reviewDocumentByHod);
+
 // 3️⃣ Approve Event
 router.post(
   "/:dept_id/events/approve",
@@ -57,6 +70,12 @@ router.post(
   },
   HODController.approveEvent
 );
+
+// 3.1️⃣ Generic approval endpoint (event/category)
+router.post(`/:dept_id/approval`, (req, res, next) => {
+  console.log(`🛠️ Generic HOD approval for dept ${req.params.dept_id}`);
+  next();
+}, HODController.hodApproval);
 
 // 4️⃣ Approve Activity Points
 router.post(
@@ -77,6 +96,18 @@ router.post("/:dept_id/documents/approve", HODController.approveDocument,
   },
   HODController.approveDocument
 );
+
+// 6️⃣ Approve Category (HOD approves categories proposed by proctors)
+router.post('/:dept_id/categories/:category_id/approve', (req, res, next) => {
+  console.log(`🔖 Approving category ${req.params.category_id} for dept ${req.params.dept_id}`);
+  next();
+}, HODController.approveCategory);
+
+// 7️⃣ View Department Events (with filters)
+router.get('/:dept_id/events', (req, res, next) => {
+  console.log(`📅 HOD view events for dept ${req.params.dept_id}`);
+  next();
+}, HODController.viewDeptEvents);
 
 export default router;
 

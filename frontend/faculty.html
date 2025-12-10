@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Faculty Dashboard - Clubverse</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .event-card { border: 1px solid var(--border); padding: 12px; border-radius: 6px; margin-bottom: 10px; background: var(--background); }
+      .event-card h4 { margin: 0 0 8px 0; color: var(--primary-color); }
+      .event-card p { margin: 4px 0; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <h1>Faculty Dashboard</h1>
+    
+    <div class="box">
+      <h3>👤 Faculty Info</h3>
+      <p>Dev user ID: <input id="devUserId" placeholder="Faculty user_id (e.g., 3)" style="width: 200px;" value="3" /></p>
+      <p><small>For demo: Use header-based auth. Populate your faculty user_id above.</small></p>
+    </div>
+
+    <!-- 1️⃣ CREATE EVENT -->
+    <div class="box">
+      <h3>Create Event</h3>
+      <label>Title: <input id="eventTitle" placeholder="Workshop on ML" /></label>
+      <label>Description: <textarea id="eventDescription" placeholder="Event details..."></textarea></label>
+      <div class="grid">
+        <label>Category: <input id="eventCategory" placeholder="Technical" /></label>
+        <label>Venue: <input id="eventVenue" placeholder="Seminar Hall A" /></label>
+      </div>
+      <div class="grid">
+        <label>Start At: <input id="eventStartAt" type="datetime-local" /></label>
+        <label>End At: <input id="eventEndAt" type="datetime-local" /></label>
+      </div>
+      <div class="grid">
+        <label>Department ID: <input id="eventDeptId" placeholder="1" value="1" /></label>
+        <label>Is External: <select id="eventIsExternal"><option value="false">No</option><option value="true">Yes</option></select></label>
+      </div>
+      <div class="grid">
+        <label>Payment Amount: <input id="eventPaymentAmount" type="number" placeholder="0" value="0" /></label>
+        <label>Payment Options: <input id="eventPaymentOptions" placeholder="UPI, Cash" /></label>
+      </div>
+      <button id="btnCreateEvent">Create Event</button>
+      <pre id="outCreateEvent">(no output yet)</pre>
+    </div>
+
+    <!-- 2️⃣ ASSIGN ROLE -->
+    <div class="box">
+      <h3> Assign Role (Volunteer/Sub-Coordinator)</h3>
+      <div class="grid">
+        <label>Event ID: <input id="assignEventId" placeholder="1" /></label>
+        <label>User ID to Assign: <input id="assignUserId" placeholder="8" /></label>
+      </div>
+      <div class="grid">
+        <label>Role: <input id="assignRole" placeholder="volunteer" /></label>
+        <label>Assigned By (faculty user_id): <input id="assignedBy" placeholder="3" value="3" /></label>
+      </div>
+      <div class="grid">
+        <label>Start At: <input id="assignStartAt" type="datetime-local" /></label>
+        <label>End At: <input id="assignEndAt" type="datetime-local" /></label>
+      </div>
+      <button id="btnAssignRole">Assign Role</button>
+      <pre id="outAssignRole">(no output yet)</pre>
+    </div>
+
+    <!-- 3️⃣ GET PARTICIPANT LIST -->
+    <div class="box">
+      <h3> Get Participant List</h3>
+      <label>Event ID: <input id="participantsEventId" placeholder="1" style="width: 200px;" /></label>
+      <button id="btnGetParticipants">Get Participants</button>
+      <pre id="outParticipants">(no output yet)</pre>
+    </div>
+
+    <!-- 4️⃣ GENERATE QR FOR ATTENDANCE -->
+    <div class="box">
+      <h3>Generate QR for Attendance</h3>
+      <div class="grid">
+        <label>Event ID: <input id="qrEventId" placeholder="1" /></label>
+        <label>Expires In (seconds): <input id="qrExpiresIn" type="number" placeholder="300" value="300" /></label>
+      </div>
+      <button id="btnGenerateQR">Generate QR Token</button>
+      <pre id="outQR">(no output yet)</pre>
+    </div>
+
+    <!-- 5️⃣ GET ALL EVENTS (Browse & Overview) -->
+    <div class="box">
+      <h3> Get All Events (Browse & Overview)</h3>
+      <p><small>Filter by department, category, or semester (optional).</small></p>
+      <div class="grid">
+        <label>Department ID (optional): <input id="browseEventsDeptId" placeholder="" /></label>
+        <label>Category (optional): <input id="browseEventsCategory" placeholder="Technical" /></label>
+      </div>
+      <label>Semester (optional): <input id="browseEventsSemester" placeholder="5" style="width: 200px;" /></label>
+      <button id="btnBrowseEvents">Browse Events</button>
+      <pre id="outBrowseEvents">(no output yet)</pre>
+    </div>
+
+    <!-- 6️⃣ GET CREATED EVENTS (Faculty Dashboard View) -->
+    <div class="box">
+      <h3> Get Created Events (My Events)</h3>
+      <p><small>Shows all events you created.</small></p>
+      <label>Status (optional): <select id="createdEventsStatus"><option value="">All</option><option value="active">Active</option><option value="cancelled">Cancelled</option></select></label>
+      <button id="btnGetCreatedEvents">Get My Events</button>
+      <div id="outCreatedEvents" style="margin-top: 12px;">(no output yet)</div>
+    </div>
+
+    <script src="faculty.js"></script>
+  </body>
+</html>

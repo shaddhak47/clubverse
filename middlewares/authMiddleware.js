@@ -8,12 +8,15 @@
  * - Admin/HOD/Faculty roles use numeric staff ID.
  */
 export const readTestUser = (req, res, next) => {
-  const userId = req.headers["x-user-id"];
+	// Accept x-user-id header or `dev_user` query parameter as fallback for development
+	const userId = req.headers["x-user-id"] || req.query?.dev_user;
   const role = req.headers["x-user-role"] || "student"; // Default to student
 
-  if (!userId) {
-    return res.status(400).json({ error: "Missing x-user-id header" });
-  }
+	if (!userId) {
+		// Debug: log headers when x-user-id is missing to help diagnose CORS/frontend issues
+		console.warn('readTestUser: missing x-user-id header and no dev_user query param. Headers received:', Object.keys(req.headers));
+		return res.status(400).json({ error: "Missing x-user-id header" });
+	}
 
   // 1. Handle Student (USN)
   if (role.toLowerCase() === "student") {

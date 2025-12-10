@@ -1,4 +1,7 @@
 import db from "../config/db.js";
+import xlsx from 'xlsx';
+import bcrypt from 'bcryptjs';
+
 const AdminController = {
 
   // ============================
@@ -170,6 +173,95 @@ const AdminController = {
     } catch (err) {
       console.error("❌ Error fetching logs:", err);
       return res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  // Upload and process an Excel sheet of HODs
+  async uploadHods(req, res) {
+    try {
+      if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+      const workbook = xlsx.readFile(req.file.path);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const rows = xlsx.utils.sheet_to_json(sheet, { defval: null });
+
+      const results = [];
+
+      for (const row of rows) {
+        // Normalize possible header names
+        const email = row.email || row.Email || row.EMail || row.E_mail;
+        const name = row.name || row.Name || row.full_name || row.FullName;
+        const dept_code = row.dept_code || row.dept || row.department_code || row.Department;
+
+        if (!email) {
+          results.push({ email: null, status: 'skipped', reason: 'missing email' });
+          continue;
+        }
+
+        // Find or create department
+        let dept = null;
+        if (dept_code) {
+          dept = await db.oneOrNone('SELECT dept_id FROM departments WHERE code = $1', [String(dept_code)]);
+        }
+        if (!dept && dept_code) {
+          const created = await db.one('INSERT INTO departments (name, code) VALUES ($1, $2) RETURNING dept_id', [String(dept_code), String(dept_code)]);
+          dept = created;
+        }
+
+        // Check existing user
+        let user = await db.oneOrNone('SELECT user_id, role FROM users WHERE email = $1', [email]);
+        if (!user) {
+          const pw = bcrypt.hashSync(email + Date.now().toString().slice(-6), 10);
+          const created = await db.one(
+            `INSERT INTO users (name, email, role, is_active, password_hash, provider)
+             VALUES ($1, $2, $3, TRUE, $4, 'import') RETURNING user_id`,
+            [name || email.split('@')[0], email, 'hod', pw]
+          );
+          user = { user_id: created.user_id, role: 'hod' };
+        } else {
+          // ensure role is hod
+          if (user.role !== 'hod') {
+            await db.none('UPDATE users SET role = $1 WHERE user_id = $2', ['hod', user.user_id]);
+          }
+        }
+
+        // Create or update hod_details
+        const deptId = dept ? dept.dept_id : null;
+
+        if (deptId) {
+          // If there is already a HOD assigned to this department, reassign it to this user
+          const existingByDept = await db.oneOrNone('SELECT hod_id, user_id FROM hod_details WHERE dept_id = $1', [deptId]);
+          if (existingByDept) {
+            if (existingByDept.user_id !== user.user_id) {
+              // Reassign department to the new HOD user (update the existing record)
+              await db.none('UPDATE hod_details SET user_id = $1 WHERE hod_id = $2', [user.user_id, existingByDept.hod_id]);
+            }
+          } else {
+            // No HOD exists for this department; attach this user (insert or update by user)
+            const existingByUser = await db.oneOrNone('SELECT hod_id FROM hod_details WHERE user_id = $1', [user.user_id]);
+            if (!existingByUser) {
+              await db.none('INSERT INTO hod_details (user_id, dept_id) VALUES ($1, $2)', [user.user_id, deptId]);
+            } else {
+              await db.none('UPDATE hod_details SET dept_id = $1 WHERE user_id = $2', [deptId, user.user_id]);
+            }
+          }
+        } else {
+          // No department specified: ensure a hod_details row exists for the user
+          const existingByUser = await db.oneOrNone('SELECT hod_id FROM hod_details WHERE user_id = $1', [user.user_id]);
+          if (!existingByUser) {
+            await db.none('INSERT INTO hod_details (user_id, dept_id) VALUES ($1, NULL)', [user.user_id]);
+          } else {
+            await db.none('UPDATE hod_details SET dept_id = NULL WHERE user_id = $1', [user.user_id]);
+          }
+        }
+
+        results.push({ email, user_id: user.user_id, status: 'created_or_updated' });
+      }
+
+      return res.json({ status: 'success', processed: results.length, results });
+    } catch (err) {
+      console.error('uploadHods error:', err);
+      return res.status(500).json({ error: 'Server error', details: err.message });
     }
   }
 };

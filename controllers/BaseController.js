@@ -17,13 +17,27 @@ export default class BaseController {
      * Standardizes success responses.
      * @param {object} res - Express response object.
      * @param {object} data - The data payload to send.
-     * @param {number} statusCode - HTTP status code (default 200).
+     * @param {number|string} statusOrMessage - Optional HTTP status code or a message string.
+     * @param {string} maybeMessage - Optional message when a numeric status code is provided.
      */
-    success(res, data, statusCode = 200) {
-        return res.status(statusCode).json({
-            status: 'success',
-            data: data,
-        });
+    success(res, data, statusOrMessage = 200, maybeMessage = undefined) {
+        // Support legacy calls that passed a message string as the third parameter
+        // or the newer style where third param is numeric status code and fourth is message.
+        let statusCode = 200;
+        let message = maybeMessage;
+
+        if (typeof statusOrMessage === 'number') {
+            statusCode = statusOrMessage;
+        } else if (typeof statusOrMessage === 'string') {
+            // If a string was passed as the third arg, treat it as the message and use 200
+            message = statusOrMessage;
+            statusCode = 200;
+        }
+
+        const payload = { status: 'success', data };
+        if (message) payload.message = message;
+
+        return res.status(statusCode).json(payload);
     }
 
     /**
